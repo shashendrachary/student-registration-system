@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Registration System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="top-actions">
+    <span class="signed-in">{{ user_email }}</span>
+    <button id="themeToggle" class="theme-toggle" type="button">Dark</button>
+    <a class="logout-link" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+  <header class="hero">
+    <h1>Student Registration System</h1>
+  </header>
+
+  <main class="layout">
+    <section class="card profile-card">
+      <div class="profile-grid">
+        <div class="photo-tile">
+          <img id="photoPreview" class="photo-circle" alt="Student profile preview" />
+          <label class="upload-label">Upload Photo (Max 5 MB)
+            <input id="profile_photo_file" type="file" accept="image/png,image/jpeg,image/jpg,image/webp" />
+          </label>
+        </div>
+        <div class="quick-grid">
+          <label>Hall Ticket Number<input id="ht_no" type="text" placeholder="237Y1A62A5" required /></label>
+          <label>Student Name<input id="student_name" type="text" placeholder="Enter full name" required /></label>
+          <label>Registration Number<input id="registration_no" type="text" placeholder="REG-2026-001" /></label>
+          <label>Program<input id="program" type="text" placeholder="B.Tech CSE" /></label>
+          <label>Batch<input id="batch" type="text" placeholder="2026-2030" /></label>
+          <label>Semester
+            <select id="semester"><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+          </label>
+          <label>Section<input id="section" type="text" placeholder="A" /></label>
+          <label>Status
+            <select id="status"><option>Active</option><option>Inactive</option><option>On Hold</option></select>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card data-card">
+      <nav class="tabs" aria-label="Student sections">
+        <button class="tab active" data-tab="basic" type="button">Basic Info</button>
+        <button class="tab" data-tab="academic" type="button">Academic Info</button>
+        <button class="tab" data-tab="family" type="button">Family</button>
+        <button class="tab" data-tab="certifications" type="button">Certifications</button>
+        <button class="tab" data-tab="documents" type="button">Documents</button>
+        <button class="tab" data-tab="others" type="button">Others</button>
+      </nav>
+
+      <div class="tab-panel active" id="panel-basic">
+        <div class="form-grid">
+          <label>Official Email<input id="official_email" type="email" /></label>
+          <label>Personal Email<input id="personal_email" type="email" /></label>
+          <label>Student Mobile<input id="student_mobile" type="text" /></label>
+          <label>Alternative Mobile<input id="alternative_mobile" type="text" /></label>
+          <label>Date of Birth<input id="dob" type="date" /></label>
+          <label>Gender<select id="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></label>
+          <label>Blood Group<input id="blood_group" type="text" placeholder="A+" /></label>
+          <label>Nationality<input id="nationality" type="text" placeholder="Indian" /></label>
+          <label>Religion<input id="religion" type="text" /></label>
+          <label>Category<input id="category" type="text" placeholder="BC-A / SC / ST / OC" /></label>
+          <label>Aadhaar Number<input id="aadhaar_no" type="text" /></label>
+          <label>Passport Number<input id="passport_no" type="text" /></label>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-academic">
+        <div class="form-grid">
+          <label>10th School<input id="tenth_school" type="text" /></label>
+          <label>10th Board<input id="tenth_board" type="text" /></label>
+          <label>10th Passing Year<input id="tenth_year" type="number" /></label>
+          <label>10th Percentage<input id="tenth_percentage" type="number" step="0.01" /></label>
+          <label>Intermediate College<input id="intermediate_college" type="text" /></label>
+          <label>Intermediate Board<input id="intermediate_board" type="text" /></label>
+          <label>Intermediate Passing Year<input id="intermediate_year" type="number" /></label>
+          <label>Intermediate Percentage<input id="intermediate_percentage" type="number" step="0.01" /></label>
+          <label>Entrance Exam<input id="entrance_exam" type="text" placeholder="EAMCET/JEE/NEET" /></label>
+          <label>Entrance Rank<input id="entrance_rank" type="text" /></label>
+          <label>Admission Quota<input id="admission_quota" type="text" placeholder="Convener/Management" /></label>
+          <label>Current CGPA<input id="current_cgpa" type="number" step="0.01" /></label>
+          <label>Current Arrears<input id="arrears_count" type="number" min="0" /></label>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-family">
+        <div class="form-grid">
+          <label>Father Name<input id="father_name" type="text" /></label>
+          <label>Mother Name<input id="mother_name" type="text" /></label>
+          <label>Guardian Name<input id="guardian_name" type="text" /></label>
+          <label>Father Mobile<input id="father_mobile" type="text" /></label>
+          <label>Mother Mobile<input id="mother_mobile" type="text" /></label>
+          <label>Guardian Mobile<input id="guardian_mobile" type="text" /></label>
+          <label>Parent Email<input id="parent_email" type="email" /></label>
+          <label>Parent Income (Annual)<input id="parent_income" type="number" step="0.01" /></label>
+          <label>Parent Profession<input id="parent_profession" type="text" /></label>
+          <label>Address<input id="family_address" type="text" /></label>
+          <label>City<input id="city" type="text" /></label>
+          <label>State<input id="state" type="text" /></label>
+          <label>Pincode<input id="pincode" type="text" /></label>
+          <label>Country<input id="country" type="text" /></label>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-certifications">
+        <div class="section-head">
+          <h3>Certifications</h3>
+          <button id="addCertificationBtn" class="mini-btn" type="button">+ Add Certification</button>
+        </div>
+        <div id="certificationsContainer" class="repeat-list"></div>
+        <div class="form-grid">
+          <label>Co-Curricular Activities<input id="co_curricular" type="text" placeholder="NSS, coding clubs..." /></label>
+          <label>Extra-Curricular Activities<input id="extra_curricular" type="text" placeholder="Music, dance, art..." /></label>
+          <label>Sports Level<input id="sports_level" type="text" placeholder="College / District / State" /></label>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-documents">
+        <div class="section-head">
+          <h3>Documents</h3>
+          <button id="addDocumentBtn" class="mini-btn" type="button">+ Add Document</button>
+        </div>
+        <p class="section-note">Upload scanned files (PDF/JPG/PNG), up to 5 MB each.</p>
+        <div id="documentsContainer" class="repeat-list"></div>
+      </div>
+
+      <div class="tab-panel" id="panel-others">
+        <div class="form-grid">
+          <label>Medical Conditions<input id="medical_conditions" type="text" /></label>
+          <label class="check-field">Hostel Required<input id="hostel_required" type="checkbox" /></label>
+          <label class="check-field">Transport Required<input id="transport_required" type="checkbox" /></label>
+          <label class="check-field">Scholarship Student<input id="is_scholarship" type="checkbox" /></label>
+          <label>Scholarship Name<input id="scholarship_name" type="text" /></label>
+          <label class="span-2">Additional Notes<input id="notes" type="text" placeholder="Any special note about the student" /></label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="saveBtn" class="primary" type="button">Save / Update Student Profile</button>
+        <span id="message"></span>
+      </div>
+    </section>
+
+    <section class="card session-card">
+      <h2>Account Activity</h2>
+      <p>Last login: <strong id="lastLoginValue">Loading...</strong></p>
+    </section>
+  </main>
+
+  <div id="successModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <div class="check-wrap">
+        <svg class="checkmark" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="checkmark-circle" cx="26" cy="26" r="24"></circle>
+          <path class="checkmark-check" fill="none" d="M14 27l7 7 17-17"></path>
+        </svg>
+      </div>
+      <h3>Saved Successfully</h3>
+      <p>Student details have been saved.</p>
+      <button id="closeSuccessModal" class="mini-btn" type="button">OK</button>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
+
+
+

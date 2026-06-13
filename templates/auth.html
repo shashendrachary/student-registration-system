@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Student Registration System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="top-actions">
+    <button id="themeToggle" class="theme-toggle" type="button">Dark</button>
+  </div>
+
+  <main class="auth-layout">
+    <section class="auth-panel">
+      <div class="auth-copy">
+        <h1>Student Registration System</h1>
+        <p>Choose your role and login with your college mail ID.</p>
+      </div>
+
+      <div class="auth-card">
+        <div class="role-options" aria-label="Login role">
+          <label class="role-choice active"><input type="radio" name="authRole" value="student" checked /> Student</label>
+          <label class="role-choice"><input type="radio" name="authRole" value="admin" /> Admin</label>
+        </div>
+
+        <div class="auth-tabs">
+          <button id="loginTab" class="auth-tab active" type="button">Login</button>
+          <button id="registerTab" class="auth-tab" type="button">Register</button>
+        </div>
+
+        <form id="authForm" class="auth-form">
+          <label>College Email
+            <input id="authEmail" type="email" placeholder="yourname@mlritm.ac.in" required />
+          </label>
+          <label>Password
+            <span class="password-box">
+              <input id="authPassword" type="password" placeholder="Min 8 chars, A, 1, symbol" required />
+              <button id="passwordToggle" class="password-toggle" type="button" aria-label="Show password">&#128065;</button>
+            </span>
+          </label>
+          <p id="passwordRule" class="password-rule">Password must contain 8+ characters, 1 capital letter, 1 number, 1 symbol, and no spaces.</p>
+          <button id="authSubmit" class="primary" type="submit">Login</button>
+          <p id="authMessage" class="auth-message"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="authPopup" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <h3 id="authPopupTitle">Notice</h3>
+      <p id="authPopupText"></p>
+      <button id="closeAuthPopup" class="mini-btn" type="button">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const body = document.body;
+    const themeButton = document.getElementById("themeToggle");
+    const storedTheme = localStorage.getItem("student-theme") || "light";
+    let authMode = "login";
+
+    function applyTheme(theme) {
+      body.dataset.theme = theme;
+      themeButton.textContent = theme === "dark" ? "Light" : "Dark";
+      localStorage.setItem("student-theme", theme);
+    }
+
+    function selectedRole() {
+      return document.querySelector('input[name="authRole"]:checked').value;
+    }
+
+    function showPopup(title, text) {
+      document.getElementById("authPopupTitle").textContent = title;
+      document.getElementById("authPopupText").textContent = text;
+      document.getElementById("authPopup").classList.add("show");
+      document.getElementById("authPopup").setAttribute("aria-hidden", "false");
+    }
+
+    function hidePopup() {
+      document.getElementById("authPopup").classList.remove("show");
+      document.getElementById("authPopup").setAttribute("aria-hidden", "true");
+    }
+
+    applyTheme(storedTheme);
+    themeButton.addEventListener("click", () => applyTheme(body.dataset.theme === "dark" ? "light" : "dark"));
+    document.getElementById("closeAuthPopup").addEventListener("click", hidePopup);
+    document.getElementById("authPopup").addEventListener("click", (event) => {
+      if (event.target.id === "authPopup") hidePopup();
+    });
+
+    function setMode(mode) {
+      authMode = mode;
+      document.getElementById("loginTab").classList.toggle("active", mode === "login");
+      document.getElementById("registerTab").classList.toggle("active", mode === "register");
+      document.getElementById("authSubmit").textContent = mode === "login" ? "Login" : "Create Account";
+      document.getElementById("passwordRule").style.display = mode === "register" ? "block" : "none";
+      document.getElementById("authMessage").textContent = "";
+    }
+
+    function syncRole() {
+      const role = selectedRole();
+      document.querySelectorAll(".role-choice").forEach((label) => {
+        label.classList.toggle("active", label.querySelector("input").checked);
+      });
+      document.getElementById("registerTab").disabled = role === "admin";
+      if (role === "admin") setMode("login");
+    }
+
+    document.getElementById("loginTab").addEventListener("click", () => setMode("login"));
+    document.getElementById("registerTab").addEventListener("click", () => {
+      if (selectedRole() === "student") setMode("register");
+    });
+    document.querySelectorAll('input[name="authRole"]').forEach((input) => input.addEventListener("change", syncRole));
+    setMode("login");
+    syncRole();
+
+    document.getElementById("passwordToggle").addEventListener("click", () => {
+      const input = document.getElementById("authPassword");
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      document.getElementById("passwordToggle").setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+    });
+
+    document.getElementById("authForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const message = document.getElementById("authMessage");
+      const payload = {
+        email: document.getElementById("authEmail").value.trim(),
+        password: document.getElementById("authPassword").value,
+        role: selectedRole(),
+      };
+
+      const res = await fetch(authMode === "login" ? "/api/login" : "/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        message.textContent = data.error || "Authentication failed.";
+        message.style.color = "#b91c1c";
+        if (res.status === 404) showPopup("User not found", "New user? Please register first.");
+        return;
+      }
+
+      message.textContent = data.message || "Success.";
+      message.style.color = "#0f766e";
+
+      if (authMode === "register") {
+        showPopup("Registration successful", "Please login with your new account.");
+        setMode("login");
+        document.getElementById("authPassword").value = "";
+        return;
+      }
+
+      window.location.href = data.role === "admin" ? "/admin" : "/";
+    });
+  </script>
+</body>
+</html>
+

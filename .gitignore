@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+students.json
+students.db
+students.db-journal
+users.json
