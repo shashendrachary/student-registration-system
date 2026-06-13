@@ -25,11 +25,19 @@ A web-based Student Registration System built using Flask, HTML, CSS, and JavaSc
 
 https://student-registration-system-hc27.onrender.com
 
-## Admin Credentials
+## Screenshots
 
-Email: [admin@mlritm.ac.in](mailto:admin@mlritm.ac.in)
+### Login Page
+![Login Page](screenshots/Login_page.png)
 
-Password: Admin@123
+### Admin Dashboard
+![Admin Dashboard](screenshots/Admin_dashboard.png)
+
+### Admin Dashboard 2
+![Admin Dashboard2](screenshots/Admin_Dashboard2.png)
+
+### Student Profile
+![Student Profile](screenshots/Student_dashboard.png)
 
 ## Project Structure
 
