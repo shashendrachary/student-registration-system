@@ -321,6 +321,8 @@ def admin_student_detail(student_id: int):
     return jsonify(student)
 
 
+init_db()
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
